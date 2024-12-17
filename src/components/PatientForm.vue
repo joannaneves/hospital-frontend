@@ -41,7 +41,7 @@ export default {
         this.name = ""
         this.age = ""
         this.condition = ""
-        this.$emit("patientAdded")
+        this.$emit("patientAdded") // Emitindo evento para o componente pai
       } catch (error) {
         console.error("Erro ao adicionar paciente:", error)
       }

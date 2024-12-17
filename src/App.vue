@@ -2,8 +2,8 @@
   <div id="app">
     <h1>HOSPITAL</h1>
     <div class="container">
-      <PatientForm />
-      <PatientList />
+      <PatientForm @patientAdded="reloadPatients" />
+      <PatientList ref="patientList" />
     </div>
   </div>
 </template>
@@ -17,10 +17,16 @@ export default {
     PatientForm,
     PatientList,
   },
+  methods: {
+    reloadPatients() {
+      this.$refs.patientList.fetchPatients() // Chama o método para atualizar a lista
+    },
+  },
 }
 </script>
 
 <style>
+/* Estilos globais */
 #app {
   text-align: center;
   font-family: "Arial", sans-serif;
