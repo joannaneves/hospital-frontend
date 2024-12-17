@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <h1>HOSPITAL</h1>
+    <h1>HOSPITAL FOR SOULS</h1>
     <div class="container">
       <PatientForm @patientAdded="reloadPatients" />
       <PatientList ref="patientList" />
