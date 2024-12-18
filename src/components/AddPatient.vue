@@ -16,7 +16,14 @@
       <div class="form-group">
         <input v-model="newPatient.condition" placeholder="Condição" required />
       </div>
-      <button type="submit">Adicionar Paciente</button>
+      <div class="form-group">
+        <textarea
+          v-model="newPatient.recipe"
+          placeholder="Receita (opcional)"
+          rows="4"
+        ></textarea>
+      </div>
+      <button type="submit">Adicionar</button>
     </form>
   </div>
 </template>
@@ -31,6 +38,7 @@ export default {
         name: "",
         age: "",
         condition: "",
+        recipe: "", // Campo de receita adicionado
       },
     }
   },
@@ -38,10 +46,10 @@ export default {
     async addPatient() {
       try {
         await axios.post("http://localhost:3000/patients", {
-          patient: this.newPatient,
+          patient: this.newPatient, // Envia todos os dados, incluindo a receita
         })
         alert("Paciente adicionado com sucesso!")
-        this.newPatient = { name: "", age: "", condition: "" }
+        this.newPatient = { name: "", age: "", condition: "", recipe: "" } // Limpa o formulário
       } catch (error) {
         console.error("Erro ao adicionar paciente:", error)
       }

@@ -14,40 +14,27 @@
           <button class="delete-btn" @click="deletePatient(patient.id)">
             Excluir
           </button>
+          <button class="recipe-btn" @click="openRecipe(patient)">
+            Receita
+          </button>
         </div>
       </li>
     </ul>
 
-    <!-- Modal para Atualização -->
-    <div v-if="isEditing" class="modal">
+    <!-- Modal para Receita -->
+    <div v-if="isViewingRecipe" class="modal">
       <div class="modal-content">
-        <h3>Atualizar Paciente</h3>
-        <form @submit.prevent="updatePatient">
-          <div class="form-group">
-            <input v-model="currentPatient.name" placeholder="Nome" required />
-          </div>
-          <div class="form-group">
-            <input
-              v-model="currentPatient.age"
-              type="number"
-              placeholder="Idade"
-              required
-            />
-          </div>
-          <div class="form-group">
-            <input
-              v-model="currentPatient.condition"
-              placeholder="Condição"
-              required
-            />
-          </div>
-          <div class="form-buttons">
-            <button type="submit" class="save-btn">Salvar</button>
-            <button type="button" class="cancel-btn" @click="isEditing = false">
-              Cancelar
-            </button>
-          </div>
-        </form>
+        <h3>Receita de {{ currentPatient.name }}</h3>
+        <p>{{ recipeText }}</p>
+        <div class="form-buttons">
+          <button
+            type="button"
+            class="close-btn"
+            @click="isViewingRecipe = false"
+          >
+            Fechar
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -60,13 +47,9 @@ export default {
   data() {
     return {
       patients: [],
-      isEditing: false,
-      currentPatient: {
-        id: null,
-        name: "",
-        age: "",
-        condition: "",
-      },
+      isViewingRecipe: false,
+      currentPatient: null,
+      recipeText: "",
     }
   },
   created() {
@@ -80,7 +63,15 @@ export default {
         this.patients = response.data
       } catch (error) {
         console.error("Erro ao buscar pacientes:", error)
+        alert("Não foi possível carregar os pacientes.")
       }
+    },
+
+    // Exibir receita do paciente
+    async openRecipe(patient) {
+      this.currentPatient = patient
+      this.recipeText = patient.recipe || "Nenhuma receita disponível" // Exibe a receita do paciente
+      this.isViewingRecipe = true
     },
 
     // Deletar paciente
@@ -91,29 +82,7 @@ export default {
         this.fetchPatients()
       } catch (error) {
         console.error("Erro ao excluir paciente:", error)
-      }
-    },
-
-    // Abrir modal para editar paciente
-    editPatient(patient) {
-      this.currentPatient = { ...patient }
-      this.isEditing = true
-    },
-
-    // Atualizar paciente
-    async updatePatient() {
-      try {
-        await axios.put(
-          `http://localhost:3000/patients/${this.currentPatient.id}`,
-          {
-            patient: this.currentPatient,
-          }
-        )
-        alert("Paciente atualizado!")
-        this.isEditing = false
-        this.fetchPatients()
-      } catch (error) {
-        console.error("Erro ao atualizar paciente:", error)
+        alert("Não foi possível excluir o paciente.")
       }
     },
   },
@@ -144,6 +113,11 @@ li {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+.patient-name {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
 button {
   margin-left: 5px;
   padding: 5px 10px;
@@ -156,37 +130,25 @@ button:hover {
   opacity: 0.8;
 }
 
-button:nth-child(3) {
-  background-color: #4caf50;
-  color: white;
-}
-
-button:nth-child(4) {
-  background-color: #e57373;
-  color: white;
-}
-
 .button-container {
   display: flex;
   gap: 10px;
   justify-content: center;
 }
 
-.update-btn,
-.delete-btn {
-  padding: 5px 10px;
-  border: none;
-  border-radius: 5px;
-  color: white;
-  cursor: pointer;
-}
-
 .update-btn {
   background-color: #4caf50;
+  color: white;
 }
 
 .delete-btn {
   background-color: #e57373;
+  color: white;
+}
+
+.recipe-btn {
+  background-color: #2196f3;
+  color: white;
 }
 
 /* Estilo do Modal */
@@ -208,7 +170,7 @@ button:nth-child(4) {
   border-radius: 8px;
   border: 1px solid #4caf50;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  width: 300px;
+  width: 320px;
 }
 
 .modal-content h3 {
@@ -244,7 +206,8 @@ input {
   cursor: pointer;
 }
 
-.cancel-btn {
+.cancel-btn,
+.close-btn {
   background-color: #e57373;
   color: white;
   border: none;

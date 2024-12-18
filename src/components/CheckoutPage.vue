@@ -31,21 +31,42 @@
         <h3>Total: R$ {{ total.toFixed(2) }}</h3>
       </div>
 
-      <button class="checkout-btn" @click="completeCheckout">
-        Finalizar Compra
-      </button>
+      <!-- Formulário para pagamento com Stripe -->
+      <form @submit.prevent="handlePayment">
+        <div class="form-group">
+          <input
+            v-model="formData.name"
+            type="text"
+            placeholder="Nome no Cartão"
+            required
+          />
+        </div>
+        <div id="card-element"></div>
+        <button type="submit" class="checkout-btn">Finalizar Compra</button>
+      </form>
     </div>
+
     <div v-else>
       <p>O carrinho está vazio.</p>
     </div>
+
+    <p v-if="paymentMessage">{{ paymentMessage }}</p>
   </div>
 </template>
 
 <script>
+import { loadStripe } from "@stripe/stripe-js"
+
 export default {
   data() {
     return {
       cart: JSON.parse(localStorage.getItem("cart")) || [],
+      stripe: null,
+      cardElement: null,
+      formData: {
+        name: "",
+      },
+      paymentMessage: "",
     }
   },
   computed: {
@@ -73,16 +94,50 @@ export default {
       localStorage.setItem("cart", JSON.stringify(this.cart))
     },
 
-    // Finaliza a compra, removendo o carrinho e indo para a página inicial
-    completeCheckout() {
-      alert("Compra finalizada! Total: R$ " + this.total.toFixed(2))
-      localStorage.removeItem("cart")
-      this.cart = []
-      this.$router.push("/")
+    // Finaliza a compra e realiza o pagamento com Stripe
+    async handlePayment() {
+      try {
+        // Criação do PaymentIntent no backend
+        const response = await fetch(
+          "http://localhost:3000/create-payment-intent",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              amount: this.total * 100, // Convertendo para centavos
+              currency: "brl",
+            }),
+          }
+        )
+
+        const { clientSecret } = await response.json()
+
+        // Confirmando o pagamento com o método do cartão
+        const result = await this.stripe.confirmCardPayment(clientSecret, {
+          payment_method: {
+            card: this.cardElement,
+            billing_details: {
+              name: this.formData.name,
+            },
+          },
+        })
+
+        if (result.error) {
+          this.paymentMessage = `Erro: ${result.error.message}`
+        } else if (result.paymentIntent.status === "succeeded") {
+          this.paymentMessage = "Compra realizada com sucesso!"
+          localStorage.removeItem("cart")
+          this.cart = []
+          this.$router.push("/")
+        }
+      } catch (error) {
+        console.error(error)
+        this.paymentMessage = "Erro ao processar o pagamento."
+      }
     },
   },
-
-  // Define a quantidade inicial para 1
   mounted() {
     this.cart.forEach((item) => {
       if (!item.quantity) {
@@ -90,6 +145,16 @@ export default {
       }
     })
     this.updateLocalStorage()
+
+    // Carregar o Stripe e o elemento do cartão
+    loadStripe(
+      "pk_live_51N1GWMJ1FtsEHrbYUD2r0wgiANFfWpscSjv9QywsJ2hzdBBo0XxDReF6DPA3ta6vq4AIQoTLk0TkLNa2Hx17mGiM00XHUMfRrz"
+    ).then((stripe) => {
+      this.stripe = stripe
+      const elements = stripe.elements()
+      this.cardElement = elements.create("card")
+      this.cardElement.mount("#card-element")
+    })
   },
 }
 </script>
@@ -172,5 +237,28 @@ h2 {
 
 .checkout-btn:hover {
   opacity: 0.8;
+}
+
+/* Estilo para o formulário */
+.form-input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+  font-size: 1rem;
+}
+
+#card-element {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+.form-group {
+  margin-bottom: 20px;
 }
 </style>

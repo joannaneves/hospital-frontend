@@ -1,10 +1,15 @@
 <template>
   <div id="app">
-    <!-- Layout com Sidebar -->
+    <!-- Layout com Header e Sidebar -->
+    <header class="app-header">
+      <h1>HOSPITAL</h1>
+      <div class="cart-icon" @click="goToCheckout">
+        🛒 <span class="cart-count">{{ cartCount }}</span>
+      </div>
+    </header>
     <div class="layout">
       <!-- Navbar Lateral -->
       <nav class="sidebar">
-        <h1>HOSPITAL</h1>
         <ul>
           <li @click="navigateTo('home')">🏠 Home</li>
           <li @click="navigateTo('list')">📋 Lista de Pacientes</li>
@@ -14,7 +19,7 @@
 
       <!-- Conteúdo Dinâmico -->
       <main class="content">
-        <router-view></router-view>
+        <router-view @update-cart="updateCart"></router-view>
       </main>
     </div>
   </div>
@@ -22,6 +27,16 @@
 
 <script>
 export default {
+  data() {
+    return {
+      cart: JSON.parse(localStorage.getItem("cart")) || [],
+    }
+  },
+  computed: {
+    cartCount() {
+      return this.cart.reduce((total, item) => total + item.quantity, 0)
+    },
+  },
   methods: {
     navigateTo(route) {
       if (route === "home") {
@@ -31,6 +46,13 @@ export default {
       } else if (route === "medications") {
         this.$router.push("/medications")
       }
+    },
+    goToCheckout() {
+      this.$router.push("/checkout")
+    },
+    updateCart(updatedCart) {
+      this.cart = updatedCart
+      localStorage.setItem("cart", JSON.stringify(this.cart))
     },
   },
 }
@@ -208,5 +230,37 @@ button:hover,
 
 .checkout button:hover {
   background-color: #d35400;
+}
+
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 20px;
+}
+
+.app-header h1 {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.cart-icon {
+  position: relative;
+  cursor: pointer;
+  font-size: 1.5rem;
+}
+
+.cart-count {
+  position: absolute;
+  top: -5px;
+  right: -10px;
+  background-color: #e74c3c;
+  color: white;
+  font-size: 0.9rem;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 50%;
 }
 </style>

@@ -54,9 +54,17 @@ export default {
   },
   methods: {
     addToCart(medication) {
-      this.cart.push(medication)
+      const existingItem = this.cart.find((item) => item.id === medication.id)
+      if (existingItem) {
+        existingItem.quantity += 1
+      } else {
+        this.cart.push({ ...medication, quantity: 1 })
+      }
+      this.updateCart()
+    },
+    updateCart() {
       localStorage.setItem("cart", JSON.stringify(this.cart))
-      alert(`${medication.name} foi adicionado ao carrinho!`)
+      this.$emit("update-cart", this.cart)
     },
     goToCart() {
       this.$router.push("/checkout")
