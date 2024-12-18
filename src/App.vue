@@ -1,54 +1,214 @@
 <template>
   <div id="app">
-    <h1>HOSPITAL FOR SOULS</h1>
-    <div class="container">
-      <PatientForm @patientAdded="reloadPatients" />
-      <PatientList ref="patientList" />
+    <!-- Layout com Sidebar -->
+    <div class="layout">
+      <!-- Navbar Lateral -->
+      <nav class="sidebar">
+        <h1>HOSPITAL</h1>
+        <ul>
+          <li @click="navigateTo('home')">🏠 Home</li>
+          <li @click="navigateTo('list')">📋 Lista de Pacientes</li>
+          <li @click="navigateTo('medications')">💊 Medicamentos</li>
+        </ul>
+      </nav>
+
+      <!-- Conteúdo Dinâmico -->
+      <main class="content">
+        <router-view></router-view>
+      </main>
     </div>
   </div>
 </template>
 
 <script>
-import PatientForm from "./components/PatientForm.vue"
-import PatientList from "./components/PatientList.vue"
-
 export default {
-  components: {
-    PatientForm,
-    PatientList,
-  },
   methods: {
-    reloadPatients() {
-      this.$refs.patientList.fetchPatients() // Chama o método para atualizar a lista
+    navigateTo(route) {
+      if (route === "home") {
+        this.$router.push("/")
+      } else if (route === "list") {
+        this.$router.push("/patients")
+      } else if (route === "medications") {
+        this.$router.push("/medications")
+      }
     },
   },
 }
 </script>
 
-<style>
-/* Estilos globais */
-#app {
-  text-align: center;
-  font-family: "Arial", sans-serif;
-  background-color: #f9f9f9;
-  color: #333;
-  min-height: 100vh;
+<style scoped>
+/* Layout Geral */
+.layout {
+  display: flex;
+  height: 100vh;
+}
+
+/* Navbar Lateral */
+.sidebar {
+  background-color: #f0fdf4; /* Verde claro */
   padding: 20px;
+  width: 220px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar h1 {
+  color: #4caf50;
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar li {
+  cursor: pointer;
+  padding: 10px;
+  margin-bottom: 10px;
+  color: #333;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.sidebar li:hover {
+  background-color: #4caf50;
+  color: white;
+  transition: 0.3s;
+}
+
+/* Conteúdo Principal */
+.content {
+  flex: 1;
+  padding: 30px;
+  background-color: white;
+}
+
+/* Adicionando fontes globais no App.vue ou arquivo CSS global */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Roboto", sans-serif; /* Aplica a fonte Roboto em todo o site */
+}
+
+body {
+  background-color: #f4f7f6; /* Cor de fundo suave */
+  color: #333; /* Cor de texto padrão */
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Poppins", sans-serif; /* Aplica a fonte Poppins para os títulos */
+  font-weight: 600;
 }
 
 h1 {
-  color: #4caf50;
-  font-size: 2.5rem;
-  margin-bottom: 20px;
+  font-size: 2rem;
 }
 
-.container {
-  max-width: 600px;
-  margin: 0 auto;
-  background: #ffffff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+h2 {
+  font-size: 1.75rem;
+}
+
+h3 {
+  font-size: 1.5rem;
+}
+
+/* Títulos e textos de botões */
+button,
+.btn {
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  text-transform: uppercase;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  background-color: #4caf50;
+  color: #fff;
+  transition: background-color 0.3s ease;
+}
+
+button:hover,
+.btn:hover {
+  background-color: #45a049;
+}
+
+.sidebar {
+  background-color: #2c3e50; /* Cor de fundo escura */
+  color: #fff;
   padding: 20px;
+  width: 250px;
+  height: 100vh;
+}
+
+.sidebar h1 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.sidebar ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.sidebar ul li {
+  margin: 15px 0;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #fff; /* Cor branca */
+  font-weight: bold; /* Deixar o texto em negrito */
+  transition: color 0.3s ease;
+}
+
+.sidebar ul li:hover {
+  color: #1abc9c; /* Cor ao passar o mouse */
+}
+
+.sidebar ul li:active {
+  color: #27ae60; /* Cor ao clicar no item */
+}
+
+.content {
+  padding: 20px;
+  margin-left: 270px; /* Espaço para a barra lateral */
+}
+
+.cart-item {
+  background-color: #fff;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.cart-item p {
+  font-size: 1.1rem;
+}
+
+.total {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+.checkout button {
+  background-color: #e67e22;
+  font-size: 1.2rem;
+  padding: 12px 25px;
+  width: 100%;
+  border-radius: 5px;
+}
+
+.checkout button:hover {
+  background-color: #d35400;
 }
 </style>
