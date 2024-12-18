@@ -31,7 +31,6 @@
         <h3>Total: R$ {{ total.toFixed(2) }}</h3>
       </div>
 
-      <!-- Formulário para pagamento com Stripe -->
       <form @submit.prevent="handlePayment">
         <div class="form-group">
           <input
@@ -78,26 +77,21 @@ export default {
     },
   },
   methods: {
-    // Remove o item do carrinho e atualiza o localStorage
     removeItem(index) {
       this.cart.splice(index, 1)
       this.updateLocalStorage()
     },
 
-    // Atualiza o localStorage após a alteração da quantidade
     updateCart() {
       this.updateLocalStorage()
     },
 
-    // Atualiza o localStorage com o carrinho atual
     updateLocalStorage() {
       localStorage.setItem("cart", JSON.stringify(this.cart))
     },
 
-    // Finaliza a compra e realiza o pagamento com Stripe
     async handlePayment() {
       try {
-        // Criação do PaymentIntent no backend
         const response = await fetch(
           "http://localhost:3000/create-payment-intent",
           {
@@ -106,7 +100,7 @@ export default {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              amount: this.total * 100, // Convertendo para centavos
+              amount: this.total * 100,
               currency: "brl",
             }),
           }
@@ -114,7 +108,6 @@ export default {
 
         const { clientSecret } = await response.json()
 
-        // Confirmando o pagamento com o método do cartão
         const result = await this.stripe.confirmCardPayment(clientSecret, {
           payment_method: {
             card: this.cardElement,
@@ -146,14 +139,20 @@ export default {
     })
     this.updateLocalStorage()
 
-    // Carregar o Stripe e o elemento do cartão
     loadStripe(
       "pk_live_51N1GWMJ1FtsEHrbYUD2r0wgiANFfWpscSjv9QywsJ2hzdBBo0XxDReF6DPA3ta6vq4AIQoTLk0TkLNa2Hx17mGiM00XHUMfRrz"
     ).then((stripe) => {
       this.stripe = stripe
       const elements = stripe.elements()
       this.cardElement = elements.create("card")
-      this.cardElement.mount("#card-element")
+
+      this.$nextTick(() => {
+        if (document.getElementById("card-element")) {
+          this.cardElement.mount("#card-element")
+        } else {
+          console.error("Elemento #card-element não encontrado.")
+        }
+      })
     })
   },
 }

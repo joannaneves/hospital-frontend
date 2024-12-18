@@ -38,7 +38,7 @@ export default {
         name: "",
         age: "",
         condition: "",
-        recipe: "", // Campo de receita adicionado
+        recipe: "",
       },
     }
   },
@@ -46,10 +46,10 @@ export default {
     async addPatient() {
       try {
         await axios.post("http://localhost:3000/patients", {
-          patient: this.newPatient, // Envia todos os dados, incluindo a receita
+          patient: this.newPatient,
         })
         alert("Paciente adicionado com sucesso!")
-        this.newPatient = { name: "", age: "", condition: "", recipe: "" } // Limpa o formulário
+        this.newPatient = { name: "", age: "", condition: "", recipe: "" }
       } catch (error) {
         console.error("Erro ao adicionar paciente:", error)
       }

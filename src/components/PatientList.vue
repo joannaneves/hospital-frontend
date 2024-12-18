@@ -70,7 +70,7 @@ export default {
     // Exibir receita do paciente
     async openRecipe(patient) {
       this.currentPatient = patient
-      this.recipeText = patient.recipe || "Nenhuma receita disponível" // Exibe a receita do paciente
+      this.recipeText = patient.recipe || "Nenhuma receita disponível"
       this.isViewingRecipe = true
     },
 

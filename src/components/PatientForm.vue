@@ -28,24 +28,23 @@ export default {
       name: "",
       age: "",
       condition: "",
-      recipe: "", // Receita é um campo opcional para ser enviado
+      recipe: "",
     }
   },
   methods: {
     async addPatient() {
       try {
-        // Realize a requisição sem armazenar a resposta
         await axios.post("http://localhost:3000/patients", {
           name: this.name,
           age: this.age,
           condition: this.condition,
-          recipe: this.recipe, // Passando a receita para o backend
+          recipe: this.recipe,
         })
         alert("Paciente adicionado!")
         this.name = ""
         this.age = ""
         this.condition = ""
-        this.recipe = "" // Limpa o campo de receita após o envio
+        this.recipe = ""
         this.$emit("patientAdded")
       } catch (error) {
         console.error("Erro ao adicionar paciente:", error)
