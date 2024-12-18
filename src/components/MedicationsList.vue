@@ -48,16 +48,14 @@ export default {
           image:
             "https://www.farmadireta.com.br/imagens-complete/1000x1000/enterogermina-plus-5ml-com-5-flaconetes-958b2328c7.jpg",
         },
-        // Adicione os 20 medicamentos
       ],
-      cart: JSON.parse(localStorage.getItem("cart")) || [], // Carregar o carrinho do localStorage
+      cart: JSON.parse(localStorage.getItem("cart")) || [],
     }
   },
   methods: {
     addToCart(medication) {
-      // Adicionando o medicamento ao carrinho
       this.cart.push(medication)
-      localStorage.setItem("cart", JSON.stringify(this.cart)) // Armazenando o carrinho no localStorage
+      localStorage.setItem("cart", JSON.stringify(this.cart))
       alert(`${medication.name} foi adicionado ao carrinho!`)
     },
     goToCart() {

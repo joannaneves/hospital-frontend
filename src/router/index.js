@@ -1,6 +1,6 @@
 import AddPatient from "@/components/AddPatient.vue"
-import CheckoutPage from "@/components/CheckoutPage.vue" // Nome alterado
-import MedicationsList from "@/components/MedicationsList.vue" // Nome alterado
+import CheckoutPage from "@/components/CheckoutPage.vue"
+import MedicationsList from "@/components/MedicationsList.vue"
 import PatientList from "@/components/PatientList.vue"
 import { createRouter, createWebHistory } from "vue-router"
 

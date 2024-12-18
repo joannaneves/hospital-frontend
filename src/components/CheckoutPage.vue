@@ -11,7 +11,6 @@
         <div class="cart-item-details">
           <p>{{ item.name }} - R$ {{ item.price.toFixed(2) }}</p>
 
-          <!-- Input para quantidade com valor inicial de 1 -->
           <div class="quantity-control">
             <label for="quantity">Quantidade:</label>
             <input
@@ -24,7 +23,6 @@
             />
           </div>
 
-          <!-- Botão de Excluir com ajuste no estilo -->
           <button class="btn-remove" @click="removeItem(index)">Excluir</button>
         </div>
       </div>
@@ -84,7 +82,7 @@ export default {
     },
   },
 
-  // Define a quantidade inicial de 1 para itens que não possuem quantidade definida
+  // Define a quantidade inicial para 1
   mounted() {
     this.cart.forEach((item) => {
       if (!item.quantity) {
@@ -145,8 +143,8 @@ h2 {
   border: none;
   cursor: pointer;
   margin-top: 10px;
-  align-self: flex-start; /* Alinha o botão de excluir ao início */
-  width: auto; /* Evita que o botão ocupe a linha inteira */
+  align-self: flex-start;
+  width: auto;
 }
 
 .btn-remove:hover {

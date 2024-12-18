@@ -45,7 +45,7 @@ export default {
 
 /* Navbar Lateral */
 .sidebar {
-  background-color: #f0fdf4; /* Verde claro */
+  background-color: #f0fdf4;
   padding: 20px;
   width: 220px;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
@@ -85,17 +85,16 @@ export default {
   background-color: white;
 }
 
-/* Adicionando fontes globais no App.vue ou arquivo CSS global */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Roboto", sans-serif; /* Aplica a fonte Roboto em todo o site */
+  font-family: "Roboto", sans-serif;
 }
 
 body {
-  background-color: #f4f7f6; /* Cor de fundo suave */
-  color: #333; /* Cor de texto padrão */
+  background-color: #f4f7f6;
+  color: #333;
   font-size: 16px;
   line-height: 1.6;
 }
@@ -106,7 +105,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: "Poppins", sans-serif; /* Aplica a fonte Poppins para os títulos */
+  font-family: "Poppins", sans-serif;
   font-weight: 600;
 }
 
@@ -122,7 +121,6 @@ h3 {
   font-size: 1.5rem;
 }
 
-/* Títulos e textos de botões */
 button,
 .btn {
   font-family: "Poppins", sans-serif;
@@ -142,7 +140,7 @@ button:hover,
 }
 
 .sidebar {
-  background-color: #2c3e50; /* Cor de fundo escura */
+  background-color: #2c3e50;
   color: #fff;
   padding: 20px;
   width: 250px;
@@ -164,22 +162,22 @@ button:hover,
   margin: 15px 0;
   font-size: 1.2rem;
   cursor: pointer;
-  color: #fff; /* Cor branca */
-  font-weight: bold; /* Deixar o texto em negrito */
+  color: #fff;
+  font-weight: bold;
   transition: color 0.3s ease;
 }
 
 .sidebar ul li:hover {
-  color: #1abc9c; /* Cor ao passar o mouse */
+  color: #1abc9c;
 }
 
 .sidebar ul li:active {
-  color: #27ae60; /* Cor ao clicar no item */
+  color: #27ae60;
 }
 
 .content {
   padding: 20px;
-  margin-left: 270px; /* Espaço para a barra lateral */
+  margin-left: 270px;
 }
 
 .cart-item {

@@ -88,7 +88,7 @@ export default {
       try {
         await axios.delete(`http://localhost:3000/patients/${id}`)
         alert("Paciente excluído!")
-        this.fetchPatients() // Atualiza a lista
+        this.fetchPatients()
       } catch (error) {
         console.error("Erro ao excluir paciente:", error)
       }
@@ -96,7 +96,7 @@ export default {
 
     // Abrir modal para editar paciente
     editPatient(patient) {
-      this.currentPatient = { ...patient } // Clona os dados do paciente
+      this.currentPatient = { ...patient }
       this.isEditing = true
     },
 
@@ -111,7 +111,7 @@ export default {
         )
         alert("Paciente atualizado!")
         this.isEditing = false
-        this.fetchPatients() // Atualiza a lista
+        this.fetchPatients()
       } catch (error) {
         console.error("Erro ao atualizar paciente:", error)
       }
@@ -166,7 +166,6 @@ button:nth-child(4) {
   color: white;
 }
 
-/* Estilo da lista de pacientes */
 .button-container {
   display: flex;
   gap: 10px;
@@ -183,11 +182,11 @@ button:nth-child(4) {
 }
 
 .update-btn {
-  background-color: #4caf50; /* Verde claro */
+  background-color: #4caf50;
 }
 
 .delete-btn {
-  background-color: #e57373; /* Vermelho claro */
+  background-color: #e57373;
 }
 
 /* Estilo do Modal */
@@ -204,7 +203,7 @@ button:nth-child(4) {
 }
 
 .modal-content {
-  background: #f0fdf4; /* Verde claro como no site */
+  background: #f0fdf4;
   padding: 20px;
   border-radius: 8px;
   border: 1px solid #4caf50;
